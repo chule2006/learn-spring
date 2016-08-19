@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.springframework.org/schema/beans"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+	<bean id="person" class="com.chuxz.learn.spring.entity.Person">
+		<property name="name" value="xingoo" />
+		<property name="age" value="12" />
+	</bean>
+
+	<bean id="stage" class="com.chuxz.learn.spring.entity.SingletonStage"
+		scope="prototype" factory-method="getInstance" init-method="turnOnLight"
+		destroy-method="turnOffLight" />
+
+	<bean id="java" class="com.chuxz.learn.spring.entity.Java" primary="true"/>
+	<bean id="cpp" class="com.chuxz.learn.spring.entity.Java" />
+	<bean id="language" class="com.chuxz.learn.spring.entity.Java" />
+
+	<bean id="programmerA" class="com.chuxz.learn.spring.entity.Programmer" autowire="byType">
+		<property name="languages">
+			<list>
+				<ref bean="java" />
+				<ref bean="cpp" />
+			</list>
+		</property>
+	</bean>
+	<bean id="programmerB" class="com.chuxz.learn.spring.entity.Programmer">
+		<property name="languages">
+			<set>
+				<ref bean="java" />
+				<ref bean="cpp" />
+			</set>
+		</property>
+	</bean>
+	<bean id="programmerC" class="com.chuxz.learn.spring.entity.Programmer">
+		<property name="lang">
+			<map>
+				<entry key="java" value-ref="java" />
+				<entry key="cpp" value-ref="cpp" />
+			</map>
+		</property>
+	</bean>
+</beans>

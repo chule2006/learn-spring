@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns:aop="http://www.springframework.org/schema/aop"
+         xmlns:tx="http://www.springframework.org/schema/tx"
+         xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd"> 
+    
+    <bean id="audience" class="com.chuxz.learn.spring.entity.aop.Audience"/>
+    
+    <bean id="sax" class="com.chuxz.learn.spring.entity.Saxophone"/>
+    <bean id="kenny" class="com.chuxz.learn.spring.entity.Instrumentalist">
+         <property name="song" value="Jingle Bells" />
+         <property name="age" value="25" />
+         <property name="instrument" ref="sax"/>
+    </bean>
+    
+    <aop:config proxy-target-class="true">
+        <aop:aspect ref="audience">
+            <aop:pointcut id="performance" expression="execution(* com.chuxz.learn.spring.entity.Performer.perform(..))"/>
+            
+            <aop:around pointcut-ref="performance"  method="watchPerformance"/>
+            <aop:before pointcut-ref="performance" method="takeSeats"/>
+            <aop:before pointcut-ref="performance" method="turnOffCellPhones"/>
+            <aop:after-returning pointcut-ref="performance" method="applaud"/>
+            <aop:after-throwing pointcut-ref="performance" method="demandRefund"/>
+        </aop:aspect>
+    </aop:config>
+    
+     <bean id="magician" class="com.chuxz.learn.spring.entity.aop.Magician"/>
+    <bean id="volunteer" class="com.chuxz.learn.spring.entity.aop.Volunteer" />
+    
+    <aop:config proxy-target-class="true">    
+        <aop:aspect ref="magician">
+            <aop:pointcut id="thinking" 
+            expression="execution(* com.chuxz.learn.spring.entity.aop.Thinker.thinkOfSomething(String)) and args(thoughts)"/>
+            <aop:before pointcut-ref="thinking" method="interceptThoughts" arg-names="thoughts"/>
+        </aop:aspect>
+    </aop:config>
+</beans>
